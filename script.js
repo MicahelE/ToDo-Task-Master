@@ -107,7 +107,16 @@ remove.onsuccess = (event) => {
 };
 
 }
-
+function remove(value) {
+  let remove = db
+  .transaction(["todo"], "readwrite")
+  .objectStore("todo")
+  .delete(value);
+remove.onsuccess = (event) => {
+  displayData();
+};
+ 
+}
 const DBOpenRequest = indexedDB.open("MyTestDatabase");
 
 DBOpenRequest.onerror = (event) => {
@@ -156,7 +165,7 @@ let fas=(timenow == dbtime)
           // alert("e dey ok");
           // new Notification("Hi there!");
           if (Notification.permission === 'granted') {
-            createNotification(cursor.value.task);
+            createNotification(cursor.value.task, cursor.primaryKey);
             console.log(cursor.value.task);
           }
         }
@@ -169,12 +178,13 @@ let fas=(timenow == dbtime)
 }
 }
 
-function createNotification(title) {
+function createNotification(title, key) {
   // Create and show the notification
   const img = 'https://mwwire.org/wp-content/uploads/2023/05/Screenshot-2023-05-25-2.33.59-PM.png';
   const text = `HEY! Your task "${title}" is now overdue.`;
   const notification = new Notification('To do list', { body: text, icon: img });
-  console.log(title);
+  notification.onshow=(event)=>{alert(`HEY! Your task "${title}" is now overdue.`)};
+  console.log(key);
   // We need to update the value of notified to 'yes' in this particular data object, so the
   // notification won't be set off on it again
 
@@ -182,22 +192,20 @@ function createNotification(title) {
   const objectStore = db.transaction(['todo'], 'readwrite').objectStore('todo');
 
   // Get the to-do list object that has this title as its title
-  const objectStoreTitleRequest = objectStore.get(title);
-
+  const objectStoreTitleRequest = objectStore.delete(key);
+  
   objectStoreTitleRequest.onsuccess = () => {
     // Grab the data object returned as the result
-    const data = objectStoreTitleRequest.result;
+    // const data = objectStoreTitleRequest.result;
 
     // Update the notified value in the object to 'yes'
-    data.notified = 'yes';
+    // data.notified = 'yes';
 
     // Create another request that inserts the item back into the database
-    const updateTitleRequest = objectStore.put(data);
+    // const updateTitleRequest = objectStore.put(data);
 
     // When this new request succeeds, run the displayData() function again to update the display
-    updateTitleRequest.onsuccess = () => {
-      displayData();
-    };
+   
   };
 };
 
