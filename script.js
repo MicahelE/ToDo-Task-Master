@@ -32,6 +32,12 @@ const currentTime = new Date()
 date.value = convertToDateTimeLocalString(currentTime)
 
 
+window.onload = (event) => {
+  if (!Notification.permission=="granted")
+  {
+    askNotificationPermission();
+  }
+};
 
 function fetch (){
 
