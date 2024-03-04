@@ -32,12 +32,21 @@ const currentTime = new Date()
 date.value = convertToDateTimeLocalString(currentTime)
 
 
-window.onload = (event) => {
-  if (!Notification.permission=="granted")
-  {
-    askNotificationPermission();
-  }
-};
+// window.onload = (event) => {
+//   if (!Notification.permission=="granted")
+//   {
+//     askNotificationPermission();
+//   }
+//   console.log("windows don load")
+// };
+
+$( document ).ready(function() {
+  
+  setTimeout(() => {  notificationBtn.click() }, 1500) 
+
+    
+  console.log("windows don load")
+});
 
 function fetch (){
 
@@ -183,7 +192,12 @@ function createNotification(title, key) {
   const img = 'https://mwwire.org/wp-content/uploads/2023/05/Screenshot-2023-05-25-2.33.59-PM.png';
   const text = `HEY! Your task "${title}" is now overdue.`;
   const notification = new Notification('To do list', { body: text, icon: img });
-  notification.onshow=(event)=>{alert(`HEY! Your task "${title}" is now overdue.`)};
+  
+  notification.onshow=(event)=>{speak(title)
+    setTimeout(() => {  alert(`HEY! Your task "${title}" is now overdue.`); }, 1000);
+    
+  
+};
   console.log(key);
   // We need to update the value of notified to 'yes' in this particular data object, so the
   // notification won't be set off on it again
@@ -209,6 +223,17 @@ function createNotification(title, key) {
   };
 };
 
+function speak(value) {
+  // Create a SpeechSynthesisUtterance
+  const utterance = new SpeechSynthesisUtterance("Here is your scheduled task " + value);
+
+  // Select a voice
+  const voices = speechSynthesis.getVoices();
+  utterance.voice = voices[0]; // Choose a specific voice
+
+  // Speak the text
+  speechSynthesis.speak(utterance);
+}
 function notifyMe() {
   if (!("Notification" in window)) {
     // Check if the browser supports notifications
@@ -234,6 +259,18 @@ function notifyMe() {
   }
   // At last, if the user has denied notifications,
   // and you want to be respectful, there is no need to bother them anymore.
+}
+
+async function playAudio() {
+  var audio = new Audio('https://cdn.freesound.org/previews/459/459965_6253486-lq.mp3');  
+  audio.type = 'audio/mp3';
+
+  try {
+    await audio.play();
+    console.log('Playing...');
+  } catch (err) {
+    console.log('Failed to play...' + err);
+  }
 }
 
   function askNotificationPermission() {
