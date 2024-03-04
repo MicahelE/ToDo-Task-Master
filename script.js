@@ -303,7 +303,7 @@ async function playAudio() {
         
       }
     }
-    const notification = new Notification("Hi there!");
+    // const notification = new Notification("Hi there!");
   };
  // Check whether browser supports the promise version of requestPermission()
   // Safari only supports the old callback-based version
