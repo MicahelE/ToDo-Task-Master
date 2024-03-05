@@ -179,7 +179,7 @@ let fas=(timenow == dbtime)
           }
           else
           {
-            alternateResponse()
+            alternateResponse(cursor.value.task, cursor.primaryKey)
           }
         }
        
@@ -192,6 +192,7 @@ let fas=(timenow == dbtime)
 }
 
 function alternateResponse(title, key) {
+  window.parent.parent.focus()
   speak(title)
     setTimeout(() => {  alert(`HEY! Your task "${title}" is now overdue.`); }, 1000)
     // First open up a transaction
@@ -203,11 +204,16 @@ function alternateResponse(title, key) {
 
 function createNotification(title, key) {
   // Create and show the notification
+  
   const img = 'https://mwwire.org/wp-content/uploads/2023/05/Screenshot-2023-05-25-2.33.59-PM.png';
   const text = `HEY! Your task "${title}" is now overdue.`;
   const notification = new Notification('To do list', { body: text, icon: img });
-  
-  notification.onshow=(event)=>{speak(title)
+  notification.onclick = function () { 
+    window.parent.parent.focus();
+};
+  notification.onshow=(event)=>{
+    // window.parent.parent.focus()
+    speak(title)
     setTimeout(() => {  alert(`HEY! Your task "${title}" is now overdue.`); }, 1000);
     
   
