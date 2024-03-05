@@ -177,6 +177,10 @@ let fas=(timenow == dbtime)
             createNotification(cursor.value.task, cursor.primaryKey);
             console.log(cursor.value.task);
           }
+          else
+          {
+            alternateResponse()
+          }
         }
        
         cursor.continue();
@@ -185,6 +189,16 @@ let fas=(timenow == dbtime)
     
   
 }
+}
+
+function alternateResponse(title, key) {
+  speak(title)
+    setTimeout(() => {  alert(`HEY! Your task "${title}" is now overdue.`); }, 1000)
+    // First open up a transaction
+  // const objectStore = db.transaction(['todo'], 'readwrite').objectStore('todo');
+
+  // Get the to-do list object that has this title as its title
+  // const objectStoreTitleRequest = objectStore.delete(key);
 }
 
 function createNotification(title, key) {
@@ -225,7 +239,7 @@ function createNotification(title, key) {
 
 function speak(value) {
   // Create a SpeechSynthesisUtterance
-  const utterance = new SpeechSynthesisUtterance("Here is your scheduled task " + value);
+  const utterance = new SpeechSynthesisUtterance("Here is your scheduled task " + value + "is now overdue");
 
   // Select a voice
   const voices = speechSynthesis.getVoices();
