@@ -5,6 +5,12 @@ const customerData = [
     { time: "2.00pm", name: "tony", task: "This task", email: "anthony@home.org" },
   ];
 
+  // import EasySpeech from 'easy-speech'
+  
+
+  EasySpeech.detect()
+
+
 
 let button= document.getElementById("submit");
 let todoText= document.getElementById("todo");
@@ -245,15 +251,33 @@ function createNotification(title, key) {
 
 function speak(value) {
   // Create a SpeechSynthesisUtterance
-  const utterance = new SpeechSynthesisUtterance("Here is your scheduled task " + value + "is now overdue");
+  // const utterance = new SpeechSynthesisUtterance("Here is your scheduled task " + value + "is now overdue");
+
 
   // Select a voice
-  const voices = speechSynthesis.getVoices();
-  utterance.voice = voices[0]; // Choose a specific voice
+  // const voices = speechSynthesis.getVoices();
+  // utterance.voice = voices[0];
+   // Choose a specific voice
 
   // Speak the text
-  speechSynthesis.speak(utterance);
+  // speechSynthesis.speak(utterance);
+
+
+  EasySpeech.init({ maxTimeout: 5000, interval: 250 })
+    .then(() => console.debug('load complete'))
+    .catch(e => console.error(e))
+
+     EasySpeech.speak({
+      text: "Here is your scheduled task " + value + "is now overdue",
+      pitch: 1,
+      rate: 1,
+      volume: 1,
+      // there are more events, see the API for supported events
+      boundary: e => console.debug('boundary reached')
+    })
 }
+
+
 function notifyMe() {
   if (!("Notification" in window)) {
     // Check if the browser supports notifications
@@ -386,5 +410,6 @@ function displayData() {
   }
   }
   setInterval(checkDeadline, 1000);
+
 
 
