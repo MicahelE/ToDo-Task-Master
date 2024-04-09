@@ -220,6 +220,9 @@ function createNotification(title, key) {
   notification.onshow=(event)=>{
     // window.parent.parent.focus()
     speak(title)
+     callMe(title)
+    // textplus=title.replace(/ /g,'+')
+    // fetch(`api.callmebot.com/start.php?user=@micahele&text="${textplus}"&lang=en-GB-Standard-B&rpt=2`).then((response) => console.log(textplus))
     setTimeout(() => {  alert(`HEY! Your task "${title}" is now overdue.`); }, 1000);
     
   
@@ -315,6 +318,17 @@ async function playAudio() {
   } catch (err) {
     console.log('Failed to play...' + err);
   }
+}
+
+async function callMe(title) {
+  
+    const textplus = title.replace(/ /g, '+');
+    console.log(textplus);
+    const url = `http://api.callmebot.com/start.php?user=@micahele&text=${textplus}&lang=en-GB-Standard-B&rpt=2`;
+     fetch(url).then(response => response.text()).then(data => console.log(data))
+
+    
+  
 }
 
   function askNotificationPermission() {
